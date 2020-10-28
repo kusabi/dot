@@ -3,9 +3,10 @@
 namespace Kusabi\Dot;
 
 use ArrayAccess;
+use Countable;
 use JsonSerializable;
 
-class Dot implements ArrayAccess, JsonSerializable
+class Dot implements ArrayAccess, Countable, JsonSerializable
 {
     /**
      * The underlying array
@@ -34,6 +35,16 @@ class Dot implements ArrayAccess, JsonSerializable
     public static function instance(array $array = [])
     {
         return new static($array);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see Countable::count()
+     */
+    public function count()
+    {
+        return count($this->array);
     }
 
     /**

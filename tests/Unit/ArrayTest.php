@@ -8,6 +8,25 @@ use PHPUnit\Framework\TestCase;
 class ArrayTest extends TestCase
 {
     /**
+     * @covers \Kusabi\Dot\Dot::count
+     */
+    public function testCount()
+    {
+        $dot = new Dot([
+            'a' => 1,
+            'b' => 2,
+            'c' => [
+                'a' => 1,
+                'b' => 2,
+                'c' => 3
+            ]
+        ]);
+        $this->assertSame(3, $dot->count());
+        $this->assertSame(3, count($dot));
+        $this->assertCount(3, $dot);
+    }
+
+    /**
      * @covers \Kusabi\Dot\Dot::offsetExists
      */
     public function testExists()
