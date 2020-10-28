@@ -2,9 +2,10 @@
 
 namespace Kusabi\Dot;
 
+use ArrayAccess;
 use JsonSerializable;
 
-class Dot implements JsonSerializable
+class Dot implements ArrayAccess, JsonSerializable
 {
     /**
      * The underlying array
@@ -33,6 +34,36 @@ class Dot implements JsonSerializable
     public static function instance(array $array = [])
     {
         return new static($array);
+    }
+
+    /**
+     * Remove an item from the array using dot notation
+     *
+     * @param string $key
+     *
+     * @return self
+     */
+    public function delete($key)
+    {
+        if (array_key_exists($key, $this->array)) {
+            unset($this->array[$key]);
+            return $this;
+        }
+
+        $array = &$this->array;
+        $segments = explode('.', $key);
+        $last = array_pop($segments);
+
+        foreach ($segments as $segment) {
+            if (!isset($array[$segment]) || !is_array($array[$segment])) {
+                return $this;
+            }
+
+            $array = &$array[$segment];
+        }
+
+        unset($array[$last]);
+        return $this;
     }
 
     /**
@@ -125,6 +156,50 @@ class Dot implements JsonSerializable
     public function jsonSerialize()
     {
         return $this->array;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ArrayAccess::offsetExists()
+     */
+    public function offsetExists($offset)
+    {
+        return $this->exists($offset);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ArrayAccess::offsetGet()
+     */
+    public function offsetGet($offset)
+    {
+        return $this->get($offset);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ArrayAccess::offsetSet()
+     */
+    public function offsetSet($offset, $value)
+    {
+        if ($offset === null) {
+            $this->array[] = $value;
+            return;
+        }
+        $this->set($offset, $value);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ArrayAccess::offsetUnset()
+     */
+    public function offsetUnset($offset)
+    {
+        $this->delete($offset);
     }
 
     /**

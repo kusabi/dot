@@ -5,8 +5,8 @@ namespace Kusabi\Dot\Tests\Benchmark;
 use Kusabi\Dot\Dot;
 
 /**
- * @Revs(2000)
- * @Iterations(10)
+ * @Revs(500)
+ * @Iterations(3)
  */
 class Bench
 {
