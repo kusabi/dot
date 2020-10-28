@@ -1,0 +1,22 @@
+{
+    "bootstrap": "vendor/autoload.php",
+    "path": "tests/Benchmark",
+    "time_unit": "milliseconds",
+    "progress": "dots",
+    "xml_storage_path": "coverage/bench",
+    "reports": {
+        "quick": {
+            "extends": "aggregate",
+            "cols": [
+                "benchmark",
+                "subject",
+                "mean",
+                "diff",
+                "mem_peak"
+            ],
+            "sort": {
+                "mean": "asc"
+            }
+        }
+    }
+}
