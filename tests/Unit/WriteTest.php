@@ -63,6 +63,38 @@ class WriteTest extends TestCase
     }
 
     /**
+     * @covers \Kusabi\Dot\Dot::setArrayReference
+     */
+    public function testSetArrayReference()
+    {
+        $array = [
+            'a' => 1,
+            'b' => 2,
+            'c' => 3
+        ];
+        $dot = Dot::instance()->setArrayReference($array);
+        $array['a'] = 4;
+        $this->assertSame([
+            'a' => 4,
+            'b' => 2,
+            'c' => 3
+        ], $dot->getArray());
+        $dot->set('b', 5);
+        $this->assertSame([
+            'a' => 4,
+            'b' => 5,
+            'c' => 3
+        ], $array);
+        $dot->setArray([1, 2, 3]);
+        $this->assertSame([1, 2, 3], $dot->getArray());
+        $this->assertSame([
+            'a' => 4,
+            'b' => 5,
+            'c' => 3
+        ], $array);
+    }
+
+    /**
      * @covers \Kusabi\Dot\Dot::setArray
      */
     public function testSetArrayIsChainable()

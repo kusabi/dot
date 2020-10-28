@@ -140,6 +140,7 @@ class Dot implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
      */
     public function setArray($array)
     {
+        unset($this->array);
         $this->array = $this->parse($array);
         return $this;
     }
@@ -247,6 +248,19 @@ class Dot implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
             $array = &$array[$k];
         }
         $array = $value;
+        return $this;
+    }
+
+    /**
+     * Set the array using a reference
+     *
+     * @param array $array
+     *
+     * @return self
+     */
+    public function setArrayReference(array &$array)
+    {
+        $this->array = &$array;
         return $this;
     }
 
