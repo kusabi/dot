@@ -77,6 +77,26 @@ class ArrayTest extends TestCase
     }
 
     /**
+     * @covers \Kusabi\Dot\Dot::getIterator
+     */
+    public function testIterable()
+    {
+        $dot = new Dot([
+            'a' => 1,
+            'b' => 2,
+            'c' => [
+                'a' => 1,
+                'b' => 2,
+                'c' => 3
+            ]
+        ]);
+        foreach ($dot as $key => $value) {
+            $items[$key] = $value;
+        }
+        $this->assertSame($dot->getArray(), $items);
+    }
+
+    /**
      * @covers \Kusabi\Dot\Dot::offsetSet
      */
     public function testSet()

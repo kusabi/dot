@@ -3,10 +3,12 @@
 namespace Kusabi\Dot;
 
 use ArrayAccess;
+use ArrayIterator;
 use Countable;
+use IteratorAggregate;
 use JsonSerializable;
 
-class Dot implements ArrayAccess, Countable, JsonSerializable
+class Dot implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
     /**
      * The underlying array
@@ -139,6 +141,19 @@ class Dot implements ArrayAccess, Countable, JsonSerializable
     {
         $this->array = $array;
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return ArrayIterator
+     *
+     * @see IteratorAggregate::getIterator()
+     *
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->array);
     }
 
     /**
