@@ -279,4 +279,38 @@ class Dot implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 
         return (array) $array;
     }
+
+    /**
+     * Flatten to a single dimensional array.
+     *
+     * Keys will be concatenated
+     *
+     * @param null $array
+     * @param string $prepend
+     *
+     * @return array
+     *
+     * @see https://stackoverflow.com/a/9546302
+     */
+    public function flatten($array = null, $prepend = '')
+    {
+        $result = [];
+
+        if ($array === null) {
+            $array = $this->array;
+        }
+
+        foreach ($array as $key => $value) {
+            if ($value instanceof Iterator) {
+                $value = iterator_to_array($value);
+            }
+            if (is_array($value) && !empty($value)) {
+                $result = $result + $this->flatten($this->parse($value), $prepend.$key.'.');
+            } else {
+                $result[$prepend.$key] = $value;
+            }
+        }
+
+        return $result;
+    }
 }
