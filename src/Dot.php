@@ -5,6 +5,7 @@ namespace Kusabi\Dot;
 use ArrayAccess;
 use ArrayIterator;
 use Countable;
+use Iterator;
 use IteratorAggregate;
 use JsonSerializable;
 
@@ -20,21 +21,21 @@ class Dot implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
     /**
      * Dot constructor.
      *
-     * @param array $array
+     * @param array|static|Iterator $array
      */
-    public function __construct(array $array = [])
+    public function __construct($array = [])
     {
-        $this->array = $array;
+        $this->array = $this->parse($array);
     }
 
     /**
      * Create a new instance using a chain-able method
      *
-     * @param array $array
+     * @param array|static|Iterator $array
      *
      * @return static
      */
-    public static function instance(array $array = [])
+    public static function instance($array = [])
     {
         return new static($array);
     }
@@ -133,13 +134,13 @@ class Dot implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
     /**
      * Set the array
      *
-     * @param array $array
+     * @param array|static|Iterator $array
      *
      * @return self
      */
     public function setArray($array)
     {
-        $this->array = $array;
+        $this->array = $this->parse($array);
         return $this;
     }
 
@@ -247,5 +248,21 @@ class Dot implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
         }
         $array = $value;
         return $this;
+    }
+
+    /**
+     * Parse an input to an array
+     *
+     * @param array $array
+     *
+     * @return array
+     */
+    protected function parse($array)
+    {
+        if ($array instanceof self) {
+            return $array->getArray();
+        }
+
+        return (array) $array;
     }
 }

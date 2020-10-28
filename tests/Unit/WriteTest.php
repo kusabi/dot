@@ -2,6 +2,7 @@
 
 namespace Kusabi\Dot\Tests\Unit;
 
+use ArrayIterator;
 use Kusabi\Dot\Dot;
 use PHPUnit\Framework\TestCase;
 
@@ -9,8 +10,9 @@ class WriteTest extends TestCase
 {
     /**
      * @covers \Kusabi\Dot\Dot::setArray
+     * @covers \Kusabi\Dot\Dot::parse
      */
-    public function testSetArray()
+    public function testSetArrayWithArray()
     {
         $dot = new Dot();
         $this->assertSame([], $dot->getArray());
@@ -19,6 +21,40 @@ class WriteTest extends TestCase
             2,
             3
         ]);
+        $this->assertSame([
+            1,
+            2,
+            3
+        ], $dot->getArray());
+    }
+
+    /**
+     * @covers \Kusabi\Dot\Dot::setArray
+     * @covers \Kusabi\Dot\Dot::parse
+     */
+    public function testSetArrayWithDot()
+    {
+        $first = new Dot([1, 2, 3]);
+        $second = new Dot();
+        $this->assertSame([], $second->getArray());
+        $second->setArray($first);
+        $this->assertSame([
+            1,
+            2,
+            3
+        ], $second->getArray());
+    }
+
+    /**
+     * @covers \Kusabi\Dot\Dot::setArray
+     * @covers \Kusabi\Dot\Dot::parse
+     */
+    public function testSetArrayWithIterator()
+    {
+        $iterator = new ArrayIterator([1, 2, 3]);
+        $dot = new Dot();
+        $this->assertSame([], $dot->getArray());
+        $dot->setArray($iterator);
         $this->assertSame([
             1,
             2,
