@@ -2,7 +2,9 @@
 
 namespace Kusabi\Dot;
 
-class Dot
+use JsonSerializable;
+
+class Dot implements JsonSerializable
 {
     /**
      * The underlying array
@@ -113,6 +115,16 @@ class Dot
     {
         $value = $this->get($key, false);
         return $strict === true ? $value !== false : $value != false;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see JsonSerializable::jsonSerialize()
+     */
+    public function jsonSerialize()
+    {
+        return $this->array;
     }
 
     /**
